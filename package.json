@@ -19,6 +19,8 @@
   },
   "author": "Mathieu Schroeter",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "tar": "1.0.x"
+  },
   "devDependencies": {}
 }
