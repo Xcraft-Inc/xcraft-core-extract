@@ -1,8 +1,9 @@
 'use strict';
 
-var tar   = require ('tar');
-var zlib  = require ('zlib');
-var zogFs = require ('xcraft-core-fs');
+var tar  = require ('tar');
+var zlib = require ('zlib');
+
+var xFs = require ('xcraft-core-fs');
 
 exports.targz = function (src, dest, filter, callbackDone) {
   var fs   = require ('fs');
@@ -21,7 +22,7 @@ exports.targz = function (src, dest, filter, callbackDone) {
       }
 
       var fullpath = path.join (dest, entry.path);
-      zogFs.mkdir (path.dirname (fullpath));
+      xFs.mkdir (path.dirname (fullpath));
       entry.pipe (fs.createWriteStream (fullpath));
     })
     .on ('end', function () {
