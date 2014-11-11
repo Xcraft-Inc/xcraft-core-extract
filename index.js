@@ -23,7 +23,10 @@ exports.targz = function (src, dest, filter, callbackDone) {
 
       var fullpath = path.join (dest, entry.path);
       xFs.mkdir (path.dirname (fullpath));
-      entry.pipe (fs.createWriteStream (fullpath));
+
+      if (entry.type === 'File') {
+        entry.pipe (fs.createWriteStream (fullpath));
+      }
     })
     .on ('end', function () {
       callbackDone (true);
