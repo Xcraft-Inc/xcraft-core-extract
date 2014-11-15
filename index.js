@@ -1,5 +1,7 @@
 'use strict';
 
+var fs   = require ('fs');
+var path = require ('path');
 var tar  = require ('tar');
 var zlib = require ('zlib');
 var when = require ('when');
@@ -7,8 +9,6 @@ var when = require ('when');
 var xFs = require ('xcraft-core-fs');
 
 exports.targz = function (src, dest, filter, callbackDone) {
-  var fs   = require ('fs');
-  var path = require ('path');
   var promises = [];
 
   fs.createReadStream (src)
