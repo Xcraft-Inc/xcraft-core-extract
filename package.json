@@ -18,7 +18,7 @@
     "url": "lib/xcraft-core-extract"
   },
   "author": "Mathieu Schroeter",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "tar": "^1.0.2",
     "when": "^3.6.3"
