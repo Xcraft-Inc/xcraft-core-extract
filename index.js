@@ -2,12 +2,14 @@
 
 var tar  = require ('tar');
 var zlib = require ('zlib');
+var when = require ('when');
 
 var xFs = require ('xcraft-core-fs');
 
 exports.targz = function (src, dest, filter, callbackDone) {
   var fs   = require ('fs');
   var path = require ('path');
+  var promises = [];
 
   fs.createReadStream (src)
     .on ('error', function (error) {
@@ -25,10 +27,20 @@ exports.targz = function (src, dest, filter, callbackDone) {
       xFs.mkdir (path.dirname (fullpath));
 
       if (entry.type === 'File') {
-        entry.pipe (fs.createWriteStream (fullpath));
+        promises.push (when.promise (function (resolve, reject) {
+          var writeStream = fs.createWriteStream (fullpath);
+          entry.pipe (writeStream).on ('error', function (err) {
+            reject (err);
+          })
+          .on ('finish', function () {
+            resolve ();
+          });
+        }));
       }
     })
     .on ('end', function () {
-      callbackDone (true);
+      when.all (promises).then (function () {
+        callbackDone (true);
+      });
     });
 };
