@@ -8,14 +8,11 @@ var when = require ('when');
 
 var xFs = require ('xcraft-core-fs');
 
-exports.targz = function (src, dest, filter, callbackDone) {
+exports.targz = function (src, dest, filter, callback) {
   var promises = [];
 
   fs.createReadStream (src)
-    .on ('error', function (error) {
-      console.error (error);
-      callbackDone (false);
-    })
+    .on ('error', callback)
     .pipe (zlib.Unzip ())
     .pipe (tar.Parse ())
     .on ('entry', function (entry) {
@@ -40,7 +37,7 @@ exports.targz = function (src, dest, filter, callbackDone) {
     })
     .on ('end', function () {
       when.all (promises).then (function () {
-        callbackDone (true);
+        callback ();
       });
     });
 };
