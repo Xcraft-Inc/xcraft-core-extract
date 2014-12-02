@@ -26,12 +26,14 @@ exports.targz = function (src, dest, filter, callback) {
       if (entry.type === 'File') {
         promises.push (when.promise (function (resolve, reject) {
           var writeStream = fs.createWriteStream (fullpath);
-          entry.pipe (writeStream).on ('error', function (err) {
-            reject (err);
-          })
-          .on ('finish', function () {
-            resolve ();
-          });
+          entry
+            .pipe (writeStream)
+            .on ('error', function (err) {
+              reject (err);
+            })
+            .on ('finish', function () {
+              resolve ();
+            });
         }));
       }
     })
