@@ -43,3 +43,6 @@ exports.targz = function (src, dest, filter, callback) {
       });
     });
 };
+
+exports.tgz = exports.targz;
+exports.gz  = exports.targz;
