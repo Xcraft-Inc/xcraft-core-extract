@@ -45,5 +45,21 @@ exports.targz = function (src, dest, filter, callback) {
     });
 };
 
+exports.zip = function (src, dest, filter, callback) {
+  var DecompressZip = require ('decompress-zip');
+
+  new DecompressZip (src)
+    .on ('error', callback)
+    .on ('extract', function (log) { /* jshint ignore:line */
+      callback ();
+    })
+    .extract ({
+      path: dest,
+      filter: function (entry) {
+        return filter ? filter.test (entry.path) : true;
+      }
+    });
+};
+
 exports.tgz = exports.targz;
 exports.gz  = exports.targz;
