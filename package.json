@@ -11,7 +11,12 @@
     "helpers",
     "extract",
     "zlib",
-    "tar"
+    "tar",
+    "zip",
+    "gz",
+    "targz",
+    "tgz",
+    "tar.gz"
   ],
   "repository": {
     "type": "file",
