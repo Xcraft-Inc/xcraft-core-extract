@@ -8,7 +8,6 @@ var xFs = require ('xcraft-core-fs');
 exports.targz = function (src, dest, filter, callback) {
   var tar  = require ('tar');
   var zlib = require ('zlib');
-  var when = require ('when');
 
   var promises = [];
 
@@ -25,7 +24,7 @@ exports.targz = function (src, dest, filter, callback) {
       xFs.mkdir (path.dirname (fullpath));
 
       if (entry.type === 'File') {
-        promises.push (when.promise (function (resolve, reject) {
+        promises.push (new Promise (function (resolve, reject) {
           var writeStream = fs.createWriteStream (fullpath, {mode: entry.props.mode});
           entry
             .pipe (writeStream)
@@ -39,7 +38,7 @@ exports.targz = function (src, dest, filter, callback) {
       }
     })
     .on ('end', function () {
-      when.all (promises).then (function () {
+      Promise.all (promises).then (function () {
         callback ();
       });
     });

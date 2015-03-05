@@ -27,7 +27,6 @@
   "dependencies": {
     "decompress-zip": "^0.1.0",
     "tar": "^1.0.3",
-    "when": "^3.7.2",
     "xcraft-core-fs": "^0.1.0",
     "xcraft-core-process": "^0.1.0"
   },
