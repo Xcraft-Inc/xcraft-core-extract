@@ -69,7 +69,7 @@ exports['7z'] = function (src, dest, filter, callback) {
 
   var args = ['x', '-y', '-o' + dest, src];
   console.log ('7za.exe ' + args.join (' '));
-  xProcess.spawn ('7za.exe', args, callback);
+  xProcess.spawn ('7za.exe', args, {}, callback);
 };
 
 exports.tgz = exports.targz;
