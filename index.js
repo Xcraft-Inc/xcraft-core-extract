@@ -65,7 +65,7 @@ exports.zip = function (src, dest, filter, callback) {
  * TODO: add Unix support.
  */
 exports['7z'] = function (src, dest, filter, callback) {
-  var xProcess = require ('xcraft-core-process');
+  var xProcess = require ('xcraft-core-process') ();
 
   var args = ['x', '-y', '-o' + dest, src];
   console.log ('7za.exe ' + args.join (' '));
