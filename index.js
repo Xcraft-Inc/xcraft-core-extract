@@ -11,9 +11,26 @@ exports.targz = function (src, dest, filter, callback) {
 
   var promises = [];
 
+  var readPercent = 0;
+  var fileSize    = fs.statSync (src).size;
+
+  var streamBefore = require ('progress-stream') ({length: fileSize});
+  streamBefore.on ('progress', function (progress) {
+    readPercent = progress.percentage;
+  });
+
+  var streamAfter = require ('progress-stream') ();
+  streamAfter.on ('progress', function (progress) {
+    var total = progress.transferred * 100.0 / readPercent;
+    streamAfter.setLength (total);
+    console.log (progress.percentage);
+  });
+
   fs.createReadStream (src)
     .on ('error', callback)
+    .pipe (streamBefore)
     .pipe (zlib.Unzip ())
+    .pipe (streamAfter)
     .pipe (tar.Parse ())
     .on ('entry', function (entry) {
       if (filter && filter.test (entry.path)) {
