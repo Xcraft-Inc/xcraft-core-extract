@@ -5,14 +5,10 @@ var path = require ('path');
 
 var xFs = require ('xcraft-core-fs');
 
-exports.targz = function (src, dest, filter, callback) {
-  var tar  = require ('tar');
-  var zlib = require ('zlib');
 
-  var promises = [];
-
+var progressStreams = function (file, callback) {
   var readPercent = 0;
-  var fileSize    = fs.statSync (src).size;
+  var fileSize    = fs.statSync (file).size;
 
   var streamBefore = require ('progress-stream') ({length: fileSize});
   streamBefore.on ('progress', function (progress) {
@@ -23,14 +19,30 @@ exports.targz = function (src, dest, filter, callback) {
   streamAfter.on ('progress', function (progress) {
     var total = progress.transferred * 100.0 / readPercent;
     streamAfter.setLength (total);
-    console.log (progress.percentage);
+
+    if (callback) {
+      callback (progress.transferred, progress.length);
+    }
   });
+
+  return {
+    before: streamBefore,
+    after:  streamAfter
+  };
+};
+
+exports.targz = function (src, dest, filter, callback, callbackProgress) {
+  var tar  = require ('tar');
+  var zlib = require ('zlib');
+
+  var promises = [];
+  var progress = progressStreams (src, callbackProgress);
 
   fs.createReadStream (src)
     .on ('error', callback)
-    .pipe (streamBefore)
+    .pipe (progress.before)
     .pipe (zlib.Unzip ())
-    .pipe (streamAfter)
+    .pipe (progress.after)
     .pipe (tar.Parse ())
     .on ('entry', function (entry) {
       if (filter && filter.test (entry.path)) {
