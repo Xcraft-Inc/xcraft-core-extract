@@ -10,10 +10,6 @@ var progressStreams = function (file, callback) {
   var readPercent = 0;
   var fileSize    = fs.statSync (file).size;
 
-  if (callback) {
-    callbackProgress (0, fileSize);
-  }
-
   var streamBefore = require ('progress-stream') ({length: fileSize});
   streamBefore.on ('progress', function (progress) {
     readPercent = progress.percentage;
