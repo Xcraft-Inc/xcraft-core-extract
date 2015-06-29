@@ -1,9 +1,12 @@
 'use strict';
 
+var moduleName = 'extract';
+
 var fs   = require ('fs');
 var path = require ('path');
 
-var xFs = require ('xcraft-core-fs');
+var xFs  = require ('xcraft-core-fs');
+var xLog = require ('xcraft-core-log') (moduleName);
 
 
 var progressStreams = function (file, callback) {
@@ -97,7 +100,7 @@ exports['7z'] = function (src, dest, filter, callback) {
   var xProcess = require ('xcraft-core-process') ();
 
   var args = ['x', '-y', '-o' + dest, src];
-  console.log ('7za.exe ' + args.join (' '));
+  xLog.verb ('7za.exe ' + args.join (' '));
   xProcess.spawn ('7za.exe', args, {}, callback);
 };
 
