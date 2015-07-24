@@ -44,7 +44,9 @@ exports.targz = function (src, dest, filter, callback, callbackProgress) {
   fs.createReadStream (src)
     .on ('error', callback)
     .pipe (progress.before)
-    .pipe (zlib.Unzip ())
+    .pipe (zlib
+            .Unzip ()
+            .on ('error', callback))
     .pipe (progress.after)
     .pipe (tar.Parse ())
     .on ('entry', function (entry) {
