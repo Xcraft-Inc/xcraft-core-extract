@@ -84,6 +84,15 @@ exports.targz = function (src, dest, filter, callback, callbackProgress) {
   }, callback, callbackProgress);
 };
 
+exports.tarbz2 = function (src, dest, filter, callback, callbackProgress) {
+  var bz2 = require ('unbzip2-stream');
+
+  untar (src, dest, filter, function (callback) {
+    return bz2 ()
+      .on ('error', callback);
+  }, callback, callbackProgress);
+};
+
 exports.zip = function (src, dest, filter, callback) {
   var DecompressZip = require ('decompress-zip');
 
@@ -114,3 +123,4 @@ exports['7z'] = function (src, dest, filter, callback) {
 
 exports.tgz = exports.targz;
 exports.gz  = exports.targz;
+exports.bz2 = exports.tarbz2;
