@@ -4,6 +4,7 @@ var moduleName = 'extract';
 
 var fs   = require ('fs');
 var path = require ('path');
+var tar  = require ('tar');
 
 var xFs  = require ('xcraft-core-fs');
 var xLog = require ('xcraft-core-log') (moduleName);
@@ -34,19 +35,14 @@ var progressStreams = function (file, callback) {
   };
 };
 
-exports.targz = function (src, dest, filter, callback, callbackProgress) {
-  var tar  = require ('tar');
-  var zlib = require ('zlib');
-
+var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
   var promises = [];
   var progress = progressStreams (src, callbackProgress);
 
   fs.createReadStream (src)
     .on ('error', callback)
     .pipe (progress.before)
-    .pipe (zlib
-            .Unzip ()
-            .on ('error', callback))
+    .pipe (inflate (callback))
     .pipe (progress.after)
     .pipe (tar.Parse ())
     .on ('entry', function (entry) {
@@ -76,6 +72,16 @@ exports.targz = function (src, dest, filter, callback, callbackProgress) {
         callback ();
       });
     });
+};
+
+exports.targz = function (src, dest, filter, callback, callbackProgress) {
+  var zlib = require ('zlib');
+
+  untar (src, dest, filter, function (callback) {
+    return zlib
+      .Unzip ()
+      .on ('error', callback);
+  }, callback, callbackProgress);
 };
 
 exports.zip = function (src, dest, filter, callback) {
