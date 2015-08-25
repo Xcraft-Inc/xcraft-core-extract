@@ -64,6 +64,8 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
               reject (err);
             })
             .on ('finish', function () {
+              var time = new Date (entry.props.mtime) / 1000;
+              fs.utimesSync (fullpath, time, time);
               resolve ();
             });
         }));
