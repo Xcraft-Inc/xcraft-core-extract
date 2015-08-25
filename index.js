@@ -55,7 +55,9 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
 
       if (entry.type === 'File') {
         promises.push (new Promise (function (resolve, reject) {
-          var writeStream = fs.createWriteStream (fullpath, {mode: entry.props.mode});
+          var writeStream = fs.createWriteStream (fullpath, {
+            mode: entry.props.mode
+          });
           entry
             .pipe (writeStream)
             .on ('error', function (err) {
