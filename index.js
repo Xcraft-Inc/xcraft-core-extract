@@ -42,6 +42,7 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
     .pipe (inflate (callback))
     .pipe (progress.after)
     .pipe (tar.extract (dest, {
+      utimes: true,
       ignore: name => {
         return filter && filter.test (name);
       }
