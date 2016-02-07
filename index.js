@@ -3,10 +3,8 @@
 var moduleName = 'extract';
 
 var fs   = require ('fs');
-var path = require ('path');
-var tar  = require ('tar');
+var tar  = require ('tar-fs');
 
-var xFs  = require ('xcraft-core-fs');
 var xLog = require ('xcraft-core-log') (moduleName);
 
 
@@ -36,7 +34,6 @@ var progressStreams = function (file, callback) {
 };
 
 var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
-  var promises = [];
   var progress = progressStreams (src, callbackProgress);
 
   fs.createReadStream (src)
@@ -44,39 +41,12 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
     .pipe (progress.before)
     .pipe (inflate (callback))
     .pipe (progress.after)
-    .pipe (tar.Parse ())
-    .on ('entry', function (entry) {
-      if (filter && filter.test (entry.path)) {
-        return;
+    .pipe (tar.extract (dest, {
+      ignore: name => {
+        return filter && filter.test (name);
       }
-
-      var fullpath = path.join (dest, entry.path);
-      xFs.mkdir (path.dirname (fullpath));
-
-      if (entry.type === 'File') {
-        promises.push (new Promise (function (resolve, reject) {
-          var writeStream = fs.createWriteStream (fullpath, {
-            mode: entry.props.mode
-          });
-          entry
-            .pipe (writeStream)
-            .on ('error', function (err) {
-              reject (err);
-            })
-            .on ('finish', function () {
-              var time = new Date (entry.props.mtime) / 1000;
-              fs.utimes (fullpath, time, time, function () {
-                resolve ();
-              });
-            });
-        }));
-      }
-    })
-    .on ('end', function () {
-      Promise.all (promises).then (function () {
-        callback ();
-      });
-    });
+    }))
+    .on ('finish', callback);
 };
 
 exports.targz = function (src, dest, filter, callback, callbackProgress) {

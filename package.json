@@ -26,8 +26,8 @@
   "license": "MIT",
   "dependencies": {
     "decompress-zip": "^0.2.0",
-    "progress-stream": "^1.1.1",
-    "tar": "^2.1.1",
+    "progress-stream": "^1.2.0",
+    "tar-fs": "^1.9.0",
     "unbzip2-stream": "^1.0.8",
     "xcraft-core-fs": "^0.1.0",
     "xcraft-core-log": "0.1.0",
