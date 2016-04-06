@@ -1,11 +1,7 @@
 'use strict';
 
-var moduleName = 'extract';
-
 var fs   = require ('fs');
 var tar  = require ('tar-fs');
-
-var xLog = require ('xcraft-core-log') (moduleName);
 
 
 var progressStreams = function (file, callback) {
@@ -50,7 +46,7 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
     .on ('finish', callback);
 };
 
-exports.targz = function (src, dest, filter, callback, callbackProgress) {
+exports.targz = function (src, dest, filter, response, callback, callbackProgress) {
   var zlib = require ('zlib');
 
   untar (src, dest, filter, function (callback) {
@@ -60,7 +56,7 @@ exports.targz = function (src, dest, filter, callback, callbackProgress) {
   }, callback, callbackProgress);
 };
 
-exports.tarbz2 = function (src, dest, filter, callback, callbackProgress) {
+exports.tarbz2 = function (src, dest, filter, response, callback, callbackProgress) {
   var bz2 = require ('unbzip2-stream');
 
   untar (src, dest, filter, function (callback) {
@@ -69,7 +65,7 @@ exports.tarbz2 = function (src, dest, filter, callback, callbackProgress) {
   }, callback, callbackProgress);
 };
 
-exports.zip = function (src, dest, filter, callback) {
+exports.zip = function (src, dest, filter, response, callback) {
   var DecompressZip = require ('decompress-zip');
 
   new DecompressZip (src)
@@ -89,11 +85,14 @@ exports.zip = function (src, dest, filter, callback) {
  * Extract 7zip archives.
  * TODO: add Unix support.
  */
-exports['7z'] = function (src, dest, filter, callback) {
-  var xProcess = require ('xcraft-core-process') ();
+exports['7z'] = function (src, dest, filter, response, callback) {
+  var xProcess = require ('xcraft-core-process') ({
+    logger: 'xlog',
+    response: response
+  });
 
   var args = ['x', '-y', '-o' + dest, src];
-  xLog.verb ('7za.exe ' + args.join (' '));
+  response.log.verb ('7za.exe ' + args.join (' '));
   xProcess.spawn ('7za.exe', args, {}, callback);
 };
 
