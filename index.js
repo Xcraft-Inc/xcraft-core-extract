@@ -88,7 +88,7 @@ exports.zip = function (src, dest, filter, response, callback) {
 exports['7z'] = function (src, dest, filter, response, callback) {
   var xProcess = require ('xcraft-core-process') ({
     logger: 'xlog',
-    response: response
+    resp:   response
   });
 
   var args = ['x', '-y', '-o' + dest, src];
