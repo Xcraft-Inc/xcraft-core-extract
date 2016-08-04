@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Xcraft extract helpers",
   "main": "index.js",
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,8 +22,8 @@
     "tar.gz"
   ],
   "repository": {
-    "type": "file",
-    "url": "lib/xcraft-core-extract"
+    "type": "git",
+    "url": "git+https://github.com/Xcraft-Inc/xcraft-core-extract.git"
   },
   "author": "Mathieu Schroeter",
   "license": "MIT",
@@ -33,5 +36,8 @@
     "xcraft-core-log": "0.1.0",
     "xcraft-core-process": "^0.1.0"
   },
-  "devDependencies": {}
+   "bugs": {
+    "url": "https://github.com/Xcraft-Inc/xcraft-core-extract/issues"
+  },
+  "homepage": "https://github.com/Xcraft-Inc/xcraft-core-extract#readme"
 }
