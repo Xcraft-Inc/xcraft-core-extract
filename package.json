@@ -1,6 +1,6 @@
 {
   "name": "xcraft-core-extract",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Xcraft extract helpers",
   "main": "index.js",
   "engines": {
@@ -32,9 +32,9 @@
     "progress-stream": "^1.2.0",
     "tar-fs": "^1.10.0",
     "unbzip2-stream": "^1.0.8",
-    "xcraft-core-fs": "^0.1.0",
-    "xcraft-core-log": "0.1.0",
-    "xcraft-core-process": "^0.1.0"
+    "xcraft-core-fs": "^1.0.0",
+    "xcraft-core-log": "^1.0.0",
+    "xcraft-core-process": "^1.0.0"
   },
   "bugs": {
     "url": "https://github.com/Xcraft-Inc/xcraft-core-extract/issues"
