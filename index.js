@@ -65,6 +65,16 @@ exports.tarbz2 = function (src, dest, filter, response, callback, callbackProgre
   }, callback, callbackProgress);
 };
 
+exports.tarxz = function (src, dest, filter, response, callback, callbackProgress) {
+  const lzma = require ('lzma-native');
+
+  untar (src, dest, filter, function (callback) {
+    return lzma
+      .createDecompressor ()
+      .on ('error', callback);
+  }, callback, callbackProgress);
+};
+
 exports.zip = function (src, dest, filter, response, callback) {
   var DecompressZip = require ('decompress-zip');
 
@@ -99,3 +109,4 @@ exports['7z'] = function (src, dest, filter, response, callback) {
 exports.tgz = exports.targz;
 exports.gz  = exports.targz;
 exports.bz2 = exports.tarbz2;
+exports.xz  = exports.tarxz;
