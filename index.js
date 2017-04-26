@@ -1,12 +1,11 @@
 'use strict';
 
-var fs   = require ('fs');
-var tar  = require ('tar-fs');
-
+var fs = require ('fs');
+var tar = require ('tar-fs');
 
 var progressStreams = function (file, callback) {
   var readPercent = 0;
-  var fileSize    = fs.statSync (file).size;
+  var fileSize = fs.statSync (file).size;
 
   var streamBefore = require ('progress-stream') ({length: fileSize});
   streamBefore.on ('progress', function (progress) {
@@ -25,54 +24,94 @@ var progressStreams = function (file, callback) {
 
   return {
     before: streamBefore,
-    after:  streamAfter
+    after: streamAfter,
   };
 };
 
 var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
   var progress = progressStreams (src, callbackProgress);
 
-  fs.createReadStream (src)
+  fs
+    .createReadStream (src)
     .on ('error', callback)
     .pipe (progress.before)
     .pipe (inflate (callback))
     .pipe (progress.after)
-    .pipe (tar.extract (dest, {
-      utimes: true,
-      ignore: name => {
-        return filter && filter.test (name);
-      }
-    }))
+    .pipe (
+      tar.extract (dest, {
+        utimes: true,
+        ignore: name => {
+          return filter && filter.test (name);
+        },
+      })
+    )
     .on ('finish', callback);
 };
 
-exports.targz = function (src, dest, filter, response, callback, callbackProgress) {
+exports.targz = function (
+  src,
+  dest,
+  filter,
+  response,
+  callback,
+  callbackProgress
+) {
   var zlib = require ('zlib');
 
-  untar (src, dest, filter, function (callback) {
-    return zlib
-      .Unzip ()
-      .on ('error', callback);
-  }, callback, callbackProgress);
+  untar (
+    src,
+    dest,
+    filter,
+    function (callback) {
+      return zlib.Unzip ().on ('error', callback);
+    },
+    callback,
+    callbackProgress
+  );
 };
 
-exports.tarbz2 = function (src, dest, filter, response, callback, callbackProgress) {
+exports.tarbz2 = function (
+  src,
+  dest,
+  filter,
+  response,
+  callback,
+  callbackProgress
+) {
   var bz2 = require ('unbzip2-stream');
 
-  untar (src, dest, filter, function (callback) {
-    return bz2 ()
-      .on ('error', callback);
-  }, callback, callbackProgress);
+  untar (
+    src,
+    dest,
+    filter,
+    function (callback) {
+      return bz2 ().on ('error', callback);
+    },
+    callback,
+    callbackProgress
+  );
 };
 
-exports.tarxz = function (src, dest, filter, response, callback, callbackProgress) {
+exports.tarxz = function (
+  src,
+  dest,
+  filter,
+  response,
+  callback,
+  callbackProgress
+) {
   const lzma = require ('lzma-native');
 
-  untar (src, dest, filter, function (callback) {
-    return lzma
-      .createDecompressor ()
-      .on ('error', callback);
-  }, callback, callbackProgress);
+  untar (
+    src,
+    dest,
+    filter,
+    function (callback) {
+      return lzma.createDecompressor ().on ('error', callback);
+    },
+    callback,
+    callbackProgress
+  );
 };
 
 exports.zip = function (src, dest, filter, response, callback) {
@@ -80,14 +119,15 @@ exports.zip = function (src, dest, filter, response, callback) {
 
   new DecompressZip (src)
     .on ('error', callback)
-    .on ('extract', function (log) { /* jshint ignore:line */
+    .on ('extract', function (log) {
+      /* jshint ignore:line */
       callback ();
     })
     .extract ({
       path: dest,
       filter: function (entry) {
         return filter ? filter.test (entry.path) : true;
-      }
+      },
     });
 };
 
@@ -98,7 +138,7 @@ exports.zip = function (src, dest, filter, response, callback) {
 exports['7z'] = function (src, dest, filter, response, callback) {
   var xProcess = require ('xcraft-core-process') ({
     logger: 'xlog',
-    resp:   response
+    resp: response,
   });
 
   var args = ['x', '-y', '-o' + dest, src];
@@ -107,6 +147,6 @@ exports['7z'] = function (src, dest, filter, response, callback) {
 };
 
 exports.tgz = exports.targz;
-exports.gz  = exports.targz;
+exports.gz = exports.targz;
 exports.bz2 = exports.tarbz2;
-exports.xz  = exports.tarxz;
+exports.xz = exports.tarxz;
