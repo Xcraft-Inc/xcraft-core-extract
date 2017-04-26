@@ -40,5 +40,8 @@
   "bugs": {
     "url": "https://github.com/Xcraft-Inc/xcraft-core-extract/issues"
   },
-  "homepage": "https://github.com/Xcraft-Inc/xcraft-core-extract#readme"
+  "homepage": "https://github.com/Xcraft-Inc/xcraft-core-extract#readme",
+  "devDependencies": {
+    "xcraft-dev-rules": "^0.1.6"
+  }
 }
