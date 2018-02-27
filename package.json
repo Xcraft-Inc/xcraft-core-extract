@@ -29,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "decompress-zip": "^0.2.0",
-    "lzma-native": "^1.5.2",
+    "lzma-native": "^3.0.5",
     "progress-stream": "^1.2.0",
     "tar-fs": "^1.10.0",
     "unbzip2-stream": "^1.0.8",
