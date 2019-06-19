@@ -33,7 +33,7 @@
     "progress-stream": "^1.2.0",
     "tar-fs": "^1.10.0",
     "unbzip2-stream": "^1.0.8",
-    "xcraft-core-fs": "^1.0.0",
+    "xcraft-core-fs": "^2.0.0",
     "xcraft-core-log": "^1.0.0",
     "xcraft-core-process": "^1.0.0"
   },
