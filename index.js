@@ -97,8 +97,7 @@ exports.zip = function(src, dest, filter, resp, callback) {
 
   new DecompressZip(src)
     .on('error', callback)
-    .on('extract', function(log) {
-      /* jshint ignore:line */
+    .on('extract', function() {
       callback();
     })
     .extract({
