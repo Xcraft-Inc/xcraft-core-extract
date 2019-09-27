@@ -14,7 +14,7 @@ var progressStreams = function(file, callback) {
 
   var streamAfter = require('progress-stream')();
   streamAfter.on('progress', function(progress) {
-    var total = progress.transferred * 100.0 / readPercent;
+    var total = (progress.transferred * 100.0) / readPercent;
     streamAfter.setLength(total);
 
     if (callback) {
@@ -31,8 +31,7 @@ var progressStreams = function(file, callback) {
 var untar = function(src, dest, filter, inflate, callback, callbackProgress) {
   var progress = progressStreams(src, callbackProgress);
 
-  fs
-    .createReadStream(src)
+  fs.createReadStream(src)
     .on('error', callback)
     .pipe(progress.before)
     .pipe(inflate(callback))
