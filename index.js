@@ -3,17 +3,17 @@
 var fs = require('fs');
 var tar = require('tar-fs');
 
-var progressStreams = function(file, callback) {
+var progressStreams = function (file, callback) {
   var readPercent = 0;
   var fileSize = fs.statSync(file).size;
 
   var streamBefore = require('progress-stream')({length: fileSize});
-  streamBefore.on('progress', function(progress) {
+  streamBefore.on('progress', function (progress) {
     readPercent = progress.percentage;
   });
 
   var streamAfter = require('progress-stream')();
-  streamAfter.on('progress', function(progress) {
+  streamAfter.on('progress', function (progress) {
     var total = (progress.transferred * 100.0) / readPercent;
     streamAfter.setLength(total);
 
@@ -28,7 +28,7 @@ var progressStreams = function(file, callback) {
   };
 };
 
-var untar = function(src, dest, filter, inflate, callback, callbackProgress) {
+var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
   var progress = progressStreams(src, callbackProgress);
 
   fs.createReadStream(src)
@@ -39,7 +39,7 @@ var untar = function(src, dest, filter, inflate, callback, callbackProgress) {
     .pipe(
       tar.extract(dest, {
         utimes: true,
-        ignore: name => {
+        ignore: (name) => {
           return filter && filter.test(name);
         },
       })
@@ -47,14 +47,14 @@ var untar = function(src, dest, filter, inflate, callback, callbackProgress) {
     .on('finish', callback);
 };
 
-exports.targz = function(src, dest, filter, resp, callback, callbackProgress) {
+exports.targz = function (src, dest, filter, resp, callback, callbackProgress) {
   var zlib = require('zlib');
 
   untar(
     src,
     dest,
     filter,
-    function(callback) {
+    function (callback) {
       return zlib.Unzip().on('error', callback);
     },
     callback,
@@ -62,14 +62,21 @@ exports.targz = function(src, dest, filter, resp, callback, callbackProgress) {
   );
 };
 
-exports.tarbz2 = function(src, dest, filter, resp, callback, callbackProgress) {
+exports.tarbz2 = function (
+  src,
+  dest,
+  filter,
+  resp,
+  callback,
+  callbackProgress
+) {
   var bz2 = require('unbzip2-stream');
 
   untar(
     src,
     dest,
     filter,
-    function(callback) {
+    function (callback) {
       return bz2().on('error', callback);
     },
     callback,
@@ -77,14 +84,14 @@ exports.tarbz2 = function(src, dest, filter, resp, callback, callbackProgress) {
   );
 };
 
-exports.tarxz = function(src, dest, filter, resp, callback, callbackProgress) {
+exports.tarxz = function (src, dest, filter, resp, callback, callbackProgress) {
   const lzma = require('lzma-native');
 
   untar(
     src,
     dest,
     filter,
-    function(callback) {
+    function (callback) {
       return lzma.createDecompressor().on('error', callback);
     },
     callback,
@@ -92,17 +99,17 @@ exports.tarxz = function(src, dest, filter, resp, callback, callbackProgress) {
   );
 };
 
-exports.zip = function(src, dest, filter, resp, callback) {
+exports.zip = function (src, dest, filter, resp, callback) {
   var DecompressZip = require('decompress-zip');
 
   new DecompressZip(src)
     .on('error', callback)
-    .on('extract', function() {
+    .on('extract', function () {
       callback();
     })
     .extract({
       path: dest,
-      filter: function(entry) {
+      filter: function (entry) {
         return filter ? filter.test(entry.path) : true;
       },
     });
@@ -112,7 +119,7 @@ exports.zip = function(src, dest, filter, resp, callback) {
  * Extract 7zip archives.
  * TODO: add Unix support.
  */
-exports['7z'] = function(src, dest, filter, resp, callback) {
+exports['7z'] = function (src, dest, filter, resp, callback) {
   var xProcess = require('xcraft-core-process')({
     logger: 'xlog',
     resp,
