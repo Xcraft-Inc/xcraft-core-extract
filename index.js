@@ -100,19 +100,16 @@ exports.tarxz = function (src, dest, filter, resp, callback, callbackProgress) {
 };
 
 exports.zip = function (src, dest, filter, resp, callback) {
-  var DecompressZip = require('decompress-zip');
+  const extract = require('extract-zip');
 
-  new DecompressZip(src)
-    .on('error', callback)
-    .on('extract', function () {
+  (async function () {
+    try {
+      await extract(src, {dir: dest});
       callback();
-    })
-    .extract({
-      path: dest,
-      filter: function (entry) {
-        return filter ? filter.test(entry.path) : true;
-      },
-    });
+    } catch (err) {
+      callback(err);
+    }
+  })();
 };
 
 /**
