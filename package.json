@@ -28,7 +28,7 @@
   "author": "Mathieu Schroeter",
   "license": "MIT",
   "dependencies": {
-    "extract-zip": "^2.0.1",
+    "extract-zip": "github:Xcraft-Inc/extract-zip",
     "lzma-native": "^4.0.3",
     "progress-stream": "^1.2.0",
     "tar-fs": "^1.10.0",
