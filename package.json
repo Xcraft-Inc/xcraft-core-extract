@@ -35,7 +35,7 @@
     "xcraft-core-fs": "^2.0.0",
     "xcraft-core-log": "^1.0.0",
     "xcraft-core-process": "^1.0.0",
-    "xz-pipe": "^0.0.2"
+    "xz-pipe": "github:Xcraft-Inc/node-xz-pipe"
   },
   "bugs": {
     "url": "https://github.com/Xcraft-Inc/xcraft-core-extract/issues"
