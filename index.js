@@ -85,14 +85,14 @@ exports.tarbz2 = function (
 };
 
 exports.tarxz = function (src, dest, filter, resp, callback, callbackProgress) {
-  const lzma = require('lzma-native');
+  const xz = require('xz-pipe');
 
   untar(
     src,
     dest,
     filter,
     function (callback) {
-      return lzma.createDecompressor().on('error', callback);
+      return xz.d().on('error', callback);
     },
     callback,
     callbackProgress

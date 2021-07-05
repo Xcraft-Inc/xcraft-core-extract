@@ -34,10 +34,8 @@
     "unbzip2-stream": "^1.0.8",
     "xcraft-core-fs": "^2.0.0",
     "xcraft-core-log": "^1.0.0",
-    "xcraft-core-process": "^1.0.0"
-  },
-  "optionalDependencies": {
-    "lzma-native": "^4.0.3"
+    "xcraft-core-process": "^1.0.0",
+    "xz-pipe": "^0.0.2"
   },
   "bugs": {
     "url": "https://github.com/Xcraft-Inc/xcraft-core-extract/issues"
