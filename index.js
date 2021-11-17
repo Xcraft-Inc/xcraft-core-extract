@@ -2,10 +2,15 @@
 
 var fs = require('fs');
 var tar = require('tar-fs');
+const throttle = require('lodash/throttle');
 
 var progressStreams = function (file, callback) {
   var readPercent = 0;
   var fileSize = fs.statSync(file).size;
+
+  if (callback) {
+    callback = throttle(callback, 250);
+  }
 
   var streamBefore = require('progress-stream')({length: fileSize});
   streamBefore.on('progress', function (progress) {
