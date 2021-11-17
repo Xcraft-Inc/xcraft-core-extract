@@ -29,9 +29,9 @@
   "license": "MIT",
   "dependencies": {
     "extract-zip": "https://github.com/Xcraft-Inc/extract-zip/archive/refs/heads/master.tar.gz",
-    "progress-stream": "^1.2.0",
-    "tar-fs": "^1.10.0",
-    "unbzip2-stream": "^1.0.8",
+    "progress-stream": "^2.0.0",
+    "tar-fs": "^2.1.1",
+    "unbzip2-stream": "^1.4.3",
     "xcraft-core-process": "^1.0.0",
     "xz-pipe": "^0.0.3"
   },
