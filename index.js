@@ -39,9 +39,7 @@ var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
     .pipe(
       tar.extract(dest, {
         utimes: true,
-        ignore: (name) => {
-          return filter && filter.test(name);
-        },
+        ignore: (name) => filter && filter.test(name),
       })
     )
     .on('finish', callback);
@@ -54,9 +52,7 @@ exports.targz = function (src, dest, filter, resp, callback, callbackProgress) {
     src,
     dest,
     filter,
-    function (callback) {
-      return zlib.Unzip().on('error', callback);
-    },
+    (callback) => zlib.Unzip().on('error', callback),
     callback,
     callbackProgress
   );
@@ -76,9 +72,7 @@ exports.tarbz2 = function (
     src,
     dest,
     filter,
-    function (callback) {
-      return bz2().on('error', callback);
-    },
+    (callback) => bz2().on('error', callback),
     callback,
     callbackProgress
   );
@@ -91,9 +85,7 @@ exports.tarxz = function (src, dest, filter, resp, callback, callbackProgress) {
     src,
     dest,
     filter,
-    function (callback) {
-      return xz.d().on('error', callback);
-    },
+    (callback) => xz.d().on('error', callback),
     callback,
     callbackProgress
   );
