@@ -36,7 +36,7 @@ var progressStreams = function (file, callback) {
 var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
   var progress = progressStreams(src, callbackProgress);
 
-  fs.mkdirSync(dest);
+  fs.mkdirSync(dest, {recursive: true});
   fs.createReadStream(src)
     .on('error', callback)
     .pipe(progress.before)
