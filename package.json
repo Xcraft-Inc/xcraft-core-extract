@@ -1,6 +1,6 @@
 {
   "name": "xcraft-core-extract",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Xcraft extract helpers",
   "main": "index.js",
   "engines": {
