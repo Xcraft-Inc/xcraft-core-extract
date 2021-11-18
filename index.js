@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var tar = require('tar-fs');
+var tar = require('tar');
 const throttle = require('lodash/throttle');
 
 var progressStreams = function (file, callback) {
@@ -36,15 +36,17 @@ var progressStreams = function (file, callback) {
 var untar = function (src, dest, filter, inflate, callback, callbackProgress) {
   var progress = progressStreams(src, callbackProgress);
 
+  fs.mkdirSync(dest);
   fs.createReadStream(src)
     .on('error', callback)
     .pipe(progress.before)
     .pipe(inflate(callback))
     .pipe(progress.after)
     .pipe(
-      tar.extract(dest, {
-        utimes: true,
-        ignore: (name) => filter && filter.test(name),
+      tar.x({
+        cwd: dest,
+        noMtime: false,
+        filter: (path) => (filter ? !filter.test(path) : true),
       })
     )
     .on('finish', callback);
