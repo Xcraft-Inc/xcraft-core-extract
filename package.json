@@ -25,7 +25,12 @@
     "type": "git",
     "url": "git+https://github.com/Xcraft-Inc/xcraft-core-extract.git"
   },
-  "author": "Mathieu Schroeter",
+  "author": "Epsitec SA",
+  "contributors": [
+    "Mathieu Schroeter <schroeter@epsitec.ch>",
+    "Samuel Loup <loup@epsitec.ch>",
+    "Gillian Fries <fries@epsitec.ch>"
+  ],
   "license": "MIT",
   "dependencies": {
     "extract-zip": "https://github.com/Xcraft-Inc/extract-zip/archive/refs/heads/master.tar.gz",
